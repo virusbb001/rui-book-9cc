@@ -4,6 +4,10 @@ assert() {
   input="$2"
 
   ./9cc "$input" > tmp.s
+  if [ $? -ne 0 ]; then
+    echo "compile failed: $input"
+    exit 1
+  fi
   cc -o tmp tmp.s
   ./tmp
   actual="$?"
@@ -26,5 +30,23 @@ assert 15 "5*(9-6)"
 assert 4 "(3+5)/2"
 assert 10 "-10+20"
 assert 10 "+20-10"
+assert 1 "1==1"
+assert 0 "1==2"
+assert 0 "1!=1"
+assert 1 "1!=2"
+
+assert 1 "1<2"
+assert 0 "2<1"
+assert 0 "1<1"
+assert 1 "1<=2"
+assert 0 "2<=1"
+assert 1 "1<=1"
+
+assert 0 "1>2"
+assert 1 "2>1"
+assert 0 "1>1"
+assert 0 "1>=2"
+assert 1 "2>=1"
+assert 1 "1>=1"
 
 echo OK
