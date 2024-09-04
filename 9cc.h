@@ -40,7 +40,6 @@ struct Node {
   int val;       // kindがND_NUMの場合のみ使う
 };
 
-void error(char *fmt, ...);
 Token *tokenize(char *p);
 Node *expr();
 
@@ -50,5 +49,7 @@ void gen(Node *node);
 extern Token *token;
 // 入力プログラム
 extern char *user_input;
+
+void error(char *fmt, ...);
 void error_at(char *loc, char *fmt, ...);
 
