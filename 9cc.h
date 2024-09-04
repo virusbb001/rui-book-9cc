@@ -13,6 +13,8 @@ typedef enum {
   ND_LEQ, // <=
   ND_GT,  // >
   ND_GEQ, // >=
+  ND_ASSIGN, // =
+  ND_LVAR, // ローカル変数
 } NodeKind;
 
 typedef struct Node Node;
@@ -23,10 +25,12 @@ struct Node {
   Node *lhs;     // 左辺
   Node *rhs;     // 右辺
   int val;       // kindがND_NUMの場合のみ使う
+  int offset;   // kindがND_LVARの場合のみ使う
 };
 
 Token *tokenize(char *p);
 Node *expr();
+void program();
 
 void gen(Node *node);
 
@@ -34,6 +38,8 @@ void gen(Node *node);
 extern Token *token;
 // 入力プログラム
 extern char *user_input;
+// 
+extern Node *code[100];
 
 void error(char *fmt, ...);
 void error_at(char *loc, char *fmt, ...);

@@ -28,6 +28,11 @@ Token *tokenize(char *p) {
       continue;
     }
 
+    if ('a' <= *p && *p <= 'z') {
+      cur = new_token(TK_IDENT, cur, p++, 1);
+      continue;
+    }
+
     if (*p == '=' && *(p+1) == '=') {
       cur = new_token(TK_RESERVED, cur, p, 2);
       p = p+2;
@@ -58,7 +63,16 @@ Token *tokenize(char *p) {
       }
     }
 
-    if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')') {
+    if (
+      *p == '+'
+      || *p == '-'
+      || *p == '*'
+      || *p == '/'
+      || *p == '('
+      || *p == ')'
+      || *p == ';'
+      || *p == '='
+    ) {
       cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
     }
@@ -69,7 +83,7 @@ Token *tokenize(char *p) {
       continue;
     }
 
-    error("トークナイズできません");
+    error("トークナイズできません: %c", *p);
   }
 
   new_token(TK_EOF, cur, p, 1);
