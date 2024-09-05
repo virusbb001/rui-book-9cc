@@ -29,7 +29,11 @@ Token *tokenize(char *p) {
     }
 
     if ('a' <= *p && *p <= 'z') {
-      cur = new_token(TK_IDENT, cur, p++, 1);
+      char *start = p;
+      while(('a' <= *p && *p <= 'z')) {
+        p = p+1;
+      }
+      cur = new_token(TK_IDENT, cur, start, p-start);
       continue;
     }
 
