@@ -31,6 +31,15 @@ bool consume(char *op) {
   return true;
 }
 
+Token* consume_special(TokenKind kind) {
+  if (token->kind == kind) {
+    Token* cur = token;
+    token = token->next;
+    return cur;
+  }
+  return NULL;
+}
+
 Token *consume_ident() {
   if (token->kind == TK_IDENT) {
     Token *cur = token;
@@ -79,7 +88,6 @@ Node *new_node_num(int val) {
   return node;
 }
 
-
 Node *mul();
 Node *add ();
 Node *primary();
@@ -99,7 +107,15 @@ Node *expr() {
 }
 
 Node *stmt() {
-  Node *node=expr();
+  Node *node;
+
+  if (consume_special(TK_RETURN)) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_RETURN;
+    node->lhs = expr();
+  } else {
+    node = expr();
+  }
   expect(";");
   return node;
 }

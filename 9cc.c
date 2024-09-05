@@ -12,7 +12,6 @@ Token *token;
 // 入力プログラム
 char *user_input;
 
-
 int main(int argc, char **argv) {
   if (argc != 2) {
     error("引数の個数が正しくありません");
@@ -23,6 +22,7 @@ int main(int argc, char **argv) {
   // 結果はcodeに保存される
   user_input = argv[1];
   token = tokenize(argv[1]);
+  // print_tokens(token);
   program();
 
   // アセンブリの前半部分を出力
