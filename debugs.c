@@ -12,7 +12,11 @@ void print_tokens(Token *tok) {
   Token *cur = tok;
 
   while(cur) {
-    fprintf(stderr, "%s (%p)\n", TokenKindName[cur->kind], cur->str);
+    fprintf(stderr, "%s (%p)", TokenKindName[cur->kind], cur->str);
+    if (cur->kind == TK_IDENT) {
+      fprintf(stderr, " %.*s", cur->len, cur->str);
+    }
+    fputc('\n', stderr);
     cur = cur->next;
   }
 }
