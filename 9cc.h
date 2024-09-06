@@ -2,6 +2,7 @@
 
 // 抽象構文木のノードの種類
 typedef enum {
+  ND_NOT_SET, // 誤の防止
   ND_ADD, // +
   ND_SUB, // -
   ND_MUL, // *
@@ -15,19 +16,43 @@ typedef enum {
   ND_GEQ, // >=
   ND_ASSIGN, // =
   ND_LVAR, // ローカル変数
+  ND_IF,
+  ND_WHILE,
+  ND_FOR,
+  ND_BLOCK,
   ND_RETURN, // return
 } NodeKind;
 
 typedef struct Node Node;
+typedef struct NodeList NodeList;
 
 // 抽象構文木のノードの型
 struct Node {
   NodeKind kind; // ノードの型
   Node *lhs;     // 左辺
   Node *rhs;     // 右辺
+  
+  // 制御構文用
+
+  Node *body; // 制御構文の中身
+  Node *expr; // if, while, forの2つ目
+  Node *init; // for の初期化式
+  Node *update; // forの更新式
+  Node *elseStmt; // elseの文
+
+  // ND_BLOCK用 {} の中身
+  NodeList *nodeList;
+
   int val;       // kindがND_NUMの場合のみ使う
   int offset;   // kindがND_LVARの場合のみ使う
 };
+
+// Nodeの連結リスト
+struct NodeList {
+  Node *car;
+  NodeList *cdr;
+};
+
 
 Token *tokenize(char *p);
 Node *expr();

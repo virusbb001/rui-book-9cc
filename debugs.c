@@ -5,6 +5,11 @@ const char* TokenKindName[TK_EOF+1] = {
   "TK_RESERVED",
   "TK_IDENT",
   "TK_NUM",
+  "TK_RETURN",   // return
+  "TK_IF",       // if
+  "TK_ELSE",     // else
+  "TK_WHILE",    // while
+  "TK_FOR",      // for
   "TK_EOF",
 };
 

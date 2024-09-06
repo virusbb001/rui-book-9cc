@@ -54,5 +54,10 @@ assert 1 "foo=1;foo;"
 assert 6 "foo = 1;bar = 2 + 3; foo + bar;"
 assert 14 "a=3;b=5*6-8;return a+b/2;"
 assert 5 "return 5; return 8;"
+assert 42 "if ( 1 ) return 42; return 43;"
+assert 43 "if ( 0 ) return 42; else return 43;"
+assert 6 "a=0;while(a<5) a=a+2;a;"
+assert 15 "i=0;a=0;for(i=0;i<6;i=i+1)a=a+i;a;"
+assert 4 "{a=1;b=3;return a+b;}"
 
 echo OK

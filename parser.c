@@ -20,12 +20,22 @@ LVar *find_lvar(Token *tok) {
   return NULL;
 }
 
+/**
+ * @param tok 確認したいトークン
+ * @param op 記号
+  */
+bool is_token_reserved(Token *tok, char *op) {
+  return tok->kind == TK_RESERVED
+  && strlen(op) == tok->len
+  && memcmp(tok->str, op, tok->len) == 0
+  ;
+}
+
 // 次のトークンが期待している記号のときには、トークンを1つ読み進めて
 // 真を返す。それ以外の場合には偽を返す。
 bool consume(char *op) {
-  if (token->kind != TK_RESERVED ||
-    strlen(op) != token->len ||
-    memcmp(token->str, op, token->len))
+  bool matched = is_token_reserved(token, op);
+  if (!matched)
     return false;
   token = token->next;
   return true;
@@ -108,6 +118,62 @@ Node *expr() {
 
 Node *stmt() {
   Node *node;
+
+  if (consume_special(TK_IF)) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_IF;
+    expect("(");
+    node->expr = expr();
+    expect(")");
+    node->body = stmt();
+    if (consume_special(TK_ELSE)) {
+      node->elseStmt = stmt();
+    }
+    return node;
+  }
+
+  if (consume_special(TK_WHILE)) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_WHILE;
+    expect("(");
+    node->expr = expr();
+    expect(")");
+    node->body = stmt();
+    return node;
+  }
+
+  if (consume_special(TK_FOR)) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_FOR;
+    expect("(");
+    if (!consume(";")) {
+      node->init=expr();
+      expect(";");
+    }
+    if (!consume(";")) {
+      node->expr=expr();
+      expect(";");
+    }
+    if (!consume(")")) {
+      node->update=expr();
+      expect(")");
+    }
+    node->body = stmt();
+    return node;
+  }
+
+  if (consume("{")) {
+    Node *node = calloc(1, sizeof(Node));
+    NodeList *current = calloc(1, sizeof(NodeList));
+    node->kind = ND_BLOCK;
+    node->nodeList = current;
+    while(!consume("}")) {
+      current->car = stmt();
+      current->cdr = calloc(1, sizeof(NodeList));
+      current = current->cdr;
+    }
+    return node;
+  }
 
   if (consume_special(TK_RETURN)) {
     node = calloc(1, sizeof(Node));
