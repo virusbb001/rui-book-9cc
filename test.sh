@@ -20,6 +20,28 @@ assert() {
   fi
 }
 
+assert_link() {
+  expected="$1"
+  input="$2"
+
+  ./9cc "$input" > tmp.s
+  if [ $? -ne 0 ]; then
+    echo "compile failed: $input"
+    exit 1
+  fi
+  cc -c tmp.s
+  cc -o tmp tmp.o foo.o
+  ./tmp
+  actual="$?"
+
+  if [ "$actual" = "$expected" ]; then
+    echo "$input => $actual"
+  else
+    echo "$input => $expected expected, but got $actual"
+    exit 1
+  fi
+}
+
 assert 0 "0;"
 assert 42 "42;"
 assert 21 "5+20-4;"
@@ -59,5 +81,7 @@ assert 43 "if ( 0 ) return 42; else return 43;"
 assert 6 "a=0;while(a<5) a=a+2;a;"
 assert 15 "i=0;a=0;for(i=0;i<6;i=i+1)a=a+i;a;"
 assert 4 "{a=1;b=3;return a+b;}"
+assert_link 0 "foo1();"
+# assert_link 3 "foo_int();"
 
 echo OK

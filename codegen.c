@@ -91,6 +91,11 @@ void gen(Node *node) {
         }
       }
       return;
+    case ND_CALL:
+      {
+        printf("    call %.*s\n", node->len, node->name);
+      }
+    return;
     // 2項式は次でまとめて処理する
     case ND_ADD:
     case ND_SUB:
@@ -104,7 +109,7 @@ void gen(Node *node) {
     case ND_GEQ:
       break;
     default:
-      error("gen Not implemented: %d", node->kind);
+      error("gen Not implemented: %s", NodeKindName[node->kind]);
       return;
   }
 

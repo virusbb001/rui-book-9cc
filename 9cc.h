@@ -20,8 +20,11 @@ typedef enum {
   ND_WHILE,
   ND_FOR,
   ND_BLOCK,
+  ND_CALL, // 関数呼び出し
   ND_RETURN, // return
 } NodeKind;
+
+extern const char* NodeKindName[ND_RETURN+1];
 
 typedef struct Node Node;
 typedef struct NodeList NodeList;
@@ -40,11 +43,18 @@ struct Node {
   Node *update; // forの更新式
   Node *elseStmt; // elseの文
 
-  // ND_BLOCK用 {} の中身
+  /**
+  * ND_BLOCK用 {} の中身
+  * 関数呼び出しだったら引き数
+  */
   NodeList *nodeList;
 
   int val;       // kindがND_NUMの場合のみ使う
   int offset;   // kindがND_LVARの場合のみ使う
+  
+  // ND_CALL用
+  char *name; // 変数名
+  int len; // 名前の長さ
 };
 
 // Nodeの連結リスト
@@ -52,7 +62,6 @@ struct NodeList {
   Node *car;
   NodeList *cdr;
 };
-
 
 Token *tokenize(char *p);
 Node *expr();

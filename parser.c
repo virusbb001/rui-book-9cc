@@ -268,6 +268,15 @@ Node *primary() {
   Token *tok = consume_ident();
   if (tok) {
     Node *node = calloc(1, sizeof(Node));
+    if (consume("(")) {
+      node->kind = ND_CALL;
+      node->nodeList = calloc(1, sizeof(NodeList));
+      node->name = tok->str;
+      node->len = tok->len;
+      expect(")");
+      return node;
+    }
+
     node->kind = ND_LVAR;
 
     LVar *lvar = find_lvar(tok);
