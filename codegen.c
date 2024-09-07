@@ -94,6 +94,7 @@ void gen(Node *node) {
     case ND_CALL:
       {
         printf("    call %.*s\n", node->len, node->name);
+        printf("    push rax\n");
       }
     return;
     // 2項式は次でまとめて処理する

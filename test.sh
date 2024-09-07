@@ -81,7 +81,7 @@ assert 43 "if ( 0 ) return 42; else return 43;"
 assert 6 "a=0;while(a<5) a=a+2;a;"
 assert 15 "i=0;a=0;for(i=0;i<6;i=i+1)a=a+i;a;"
 assert 4 "{a=1;b=3;return a+b;}"
-assert_link 0 "foo1();"
-# assert_link 3 "foo_int();"
+assert_link 0 "foo1();0;"
+assert_link 3 "foo_int();"
 
 echo OK
