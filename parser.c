@@ -273,7 +273,13 @@ Node *primary() {
       node->nodeList = calloc(1, sizeof(NodeList));
       node->name = tok->str;
       node->len = tok->len;
-      expect(")");
+      NodeList *current = node->nodeList;
+      while (!consume(")")) {
+        current->car = expr();
+        current->cdr = calloc(1, sizeof(NodeList));
+        current = current->cdr;
+        consume(",");
+      }
       return node;
     }
 

@@ -13,6 +13,15 @@ void gen_lval(Node *node) {
   printf("    push rax\n");
 }
 
+char *argRegisters[] = {
+  "rdi",
+  "rsi",
+  "rdx",
+  "rcx",
+  "r8",
+  "r9"
+};
+
 void gen(Node *node) {
   switch(node->kind) {
     case ND_RETURN:
@@ -93,6 +102,17 @@ void gen(Node *node) {
       return;
     case ND_CALL:
       {
+        NodeList *arg=node->nodeList;
+        int args = 0;
+        while(arg->car) {
+          if (args>=6) {
+            error("Not implemented");
+          }
+          gen(arg->car);
+          printf("    pop %s\n", argRegisters[args]);
+          args++;
+          arg=arg->cdr;
+        }
         printf("    call %.*s\n", node->len, node->name);
         printf("    push rax\n");
       }
