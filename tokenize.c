@@ -64,7 +64,7 @@ Token *tokenize(char *p) {
 
     if ('a' <= *p && *p <= 'z') {
       char *start = p;
-      while(('a' <= *p && *p <= 'z') || ('0' <= *p && *p <= '9')) {
+      while(is_alnum(*p)) {
         p = p+1;
       }
       cur = new_token(TK_IDENT, cur, start, p-start);
